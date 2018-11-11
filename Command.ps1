@@ -15,7 +15,7 @@ $SourceFileHash = @{}
 function Get-AllFileHash([array]$FileList) {
     $AllFileHash = @{}
 
-    for ($i = 0; $i -lt 10; $i++) {
+    for ($i = 0; $i -lt $FileList.Count; $i++) {
         $AllFileHash[$FileList[$i]] = (Get-FileHash $FileList[$i] | Select-Object Hash).Hash
     }
 
@@ -39,9 +39,9 @@ function Get-SourceFileHash([array]$SourceFileList) {
 $PatchFileHash = Get-PatchFileHash $PatchFileList
 #$SourceFileHash = Get-SourcehFileHash $SourceFileList
 
-function Get-FileHashList([array]$FileList){
+function Get-FileHashList([array]$FileList,[array]$FileHash){
 
-    for ($i = 0; $i -lt 10; $i++) {
+    for ($i = 0; $i -lt $FileList.Count; $i++) {
         Write-Host $FileList[$i] `t $FileHash.($FileList[$i]) 
     }
 
@@ -49,22 +49,22 @@ function Get-FileHashList([array]$FileList){
 
 function Get-SourceFileHashList([array]$SourceFileList) {
 
+
     $SourceFileHashList = Get-FileHashList $SourceFileList
 
     return $SourceFileHashList
 }
 
-function Get-PatchFileHashList([array]$PatchFileList) {
+function Get-PatchFileHashList([array]$PatchFileList,[array]$PatchFileHash) {
 
-    $PatchFileHashList = Get-FileHashList $PatchFileList
+    $PatchFileHashList = Get-FileHashList $PatchFileList $PatchFileHash
 
     return $PatchFileHashList
 }
 
-Get-PatchFileHashList $PatchFileList
+Get-PatchFileHashList $PatchFileList $PatchFileHash
 
 #Write-Host $FileList.GetType()
 #Write-Host $FileHash.GetType()
 #Write-Host $FileList.Count
-
-Write-Host $FileHash.Count
+#Write-Host $FileHash.Count
